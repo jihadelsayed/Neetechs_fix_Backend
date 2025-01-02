@@ -5,6 +5,7 @@ import { User } from './entities/user.entity';
 import { Role } from './entities/role.entity';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './RegisterDto';
+import { CommonService } from 'src/common/common.service';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +15,8 @@ export class AuthService {
 
     @InjectRepository(Role)
     private roleRepository: Repository<Role>,
-  ) {} 
+    private readonly commonService: CommonService) {}
+
 
  
   async register(registerDto: RegisterDto): Promise<User> {
@@ -33,6 +35,14 @@ export class AuthService {
   }
   
   async login(loginDto: any): Promise<{ token: string }> {
+    // Log the login action
+    await this.commonService.logAction(
+        'USER_LOGIN',
+        loginDto.username,
+        'User',
+        `User ${loginDto.username} logged in successfully`,
+        );
+      
     // Logic for user authentication and token generation
     return { token: 'fake-jwt-token' };
   }
