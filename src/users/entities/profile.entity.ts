@@ -1,24 +1,54 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+// import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+// import { User } from 'src/auth/entities/user.entity';
+
+// @Entity()
+// export class Profile {
+//   @PrimaryGeneratedColumn()
+//   id: number;
+
+//   @Column()
+//   firstName: string;
+
+//   @Column()
+//   lastName: string;
+
+//   @Column()
+//   phone: string;
+
+//   @Column()
+//   address: string;
+
+//   @OneToOne(() => User)
+//   @JoinColumn()
+//   user: User;
+// }
 import { User } from 'src/auth/entities/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Profile {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @OneToOne(() => User, user => user.profile)
+  @JoinColumn({ name: 'userId' })
+  user: User;
+
+  @Column({ nullable: true })
   firstName: string;
 
-  @Column()
+  @Column({ nullable: true })
   lastName: string;
 
-  @Column()
-  phone: string;
+  @Column({ nullable: true })
+  avatarUrl: string;  // URL to user's profile picture
 
-  @Column()
-  address: string;
+  @Column({ nullable: true })
+  phoneNumber: string;
 
-  @OneToOne(() => User)
-  @JoinColumn()
-  user: User;
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

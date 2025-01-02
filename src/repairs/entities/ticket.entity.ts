@@ -1,5 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Technician } from './technician.entity';
+import { PartsAndLabor } from './parts-and-labor.entity';
+import { Warranty } from './warranty.entity';
 
 @Entity()
 export class Ticket {
@@ -7,14 +9,26 @@ export class Ticket {
   id: number;
 
   @Column()
-  description: string;
+  customerName: string;
+
+  @Column()
+  issueDescription: string;
+
+  @ManyToOne(() => Technician, technician => technician.tickets)
+  technician: Technician;
+
+  @OneToMany(() => PartsAndLabor, partsAndLabor => partsAndLabor.ticket)
+  partsAndLabor: PartsAndLabor[];
+
+  @ManyToOne(() => Warranty, warranty => warranty.tickets)
+  warranty: Warranty;
 
   @Column({ default: 'open' })
-  status: string;
+  status: string;  // 'open', 'in-progress', 'closed'
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Technician, (technician) => technician.tickets, { nullable: true })
-  assignedTechnician: Technician;
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

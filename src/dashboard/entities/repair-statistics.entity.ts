@@ -1,19 +1,20 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
 @Entity()
 export class RepairStatistics {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ default: 0 })
-  totalRepairs: number;
+  @Column()
+  completedRepairs: number;
 
-  @Column({ default: 0 })
-  openTickets: number;
+  @Column()
+  averageRepairTime: number; // Average time in hours
 
-  @Column({ default: 0 })
-  closedTickets: number;
+  @Column()
+  mostRepairedDevice: string;
 
-  @Column({ default: 0 })
-  partsUsed: number;
+  @Column({ type: 'timestamp' })
+  @CreateDateColumn()
+  calculatedAt: Date; // Timestamp when the statistics were calculated
 }
